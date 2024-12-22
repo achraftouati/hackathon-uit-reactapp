@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react';
 import screenshot from './assets/images/screenshot.png'; 
 
 const StaticMap = () => {
