@@ -30,7 +30,7 @@ const MapComponent = () => {
         }
       );
     } else {
-      setError('Geolocation is not supported by this browser.');
+      setError('Geolocation pas supportée par ce navigateur.');
     }
   }, []);
 
