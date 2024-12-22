@@ -1,13 +1,14 @@
 {
   "files": {
-    "main.css": "/hackathon-uit-reactapp/static/css/main.94008146.css",
-    "main.js": "/hackathon-uit-reactapp/static/js/main.db9efd77.js",
+    "main.css": "/hackathon-uit-reactapp/static/css/main.258ebb53.css",
+    "main.js": "/hackathon-uit-reactapp/static/js/main.a2b5376d.js",
+    "static/media/screenshot.png": "/hackathon-uit-reactapp/static/media/screenshot.b1e015fed81588e12f0f.png",
     "index.html": "/hackathon-uit-reactapp/index.html",
-    "main.94008146.css.map": "/hackathon-uit-reactapp/static/css/main.94008146.css.map",
-    "main.db9efd77.js.map": "/hackathon-uit-reactapp/static/js/main.db9efd77.js.map"
+    "main.258ebb53.css.map": "/hackathon-uit-reactapp/static/css/main.258ebb53.css.map",
+    "main.a2b5376d.js.map": "/hackathon-uit-reactapp/static/js/main.a2b5376d.js.map"
   },
   "entrypoints": [
-    "static/css/main.94008146.css",
-    "static/js/main.db9efd77.js"
+    "static/css/main.258ebb53.css",
+    "static/js/main.a2b5376d.js"
   ]
 }
