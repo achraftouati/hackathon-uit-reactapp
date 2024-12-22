@@ -7,11 +7,12 @@ function App() {
   const [sideMenuVisible, setSideMenuVisible] = useState(true);
   const [isAlertMode, setIsAlertMode] = useState(false);
   const [userLocation, setUserLocation] = useState(null);
+  const [incidentDescription, setIncidentDescription] = useState('');
 
   const safeZones = [
-    { latitude: 36.8065, longitude: 10.1815 }, 
-    { latitude: 36.8028, longitude: 10.1796 }, 
-    { latitude: 36.8000, longitude: 10.1700 }, 
+    { latitude: 36.8065, longitude: 10.1815 },
+    { latitude: 36.8028, longitude: 10.1796 },
+    { latitude: 36.8000, longitude: 10.1700 },
   ];
 
   useEffect(() => {
@@ -42,8 +43,9 @@ function App() {
         Math.sin(dLon / 2) *
         Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c; 
+    return R * c;
   };
+
   const isInSafeZone = () => {
     if (!userLocation) return false;
     return safeZones.some((zone) => {
@@ -53,7 +55,7 @@ function App() {
         zone.latitude,
         zone.longitude
       );
-      return distance < 0.5; 
+      return distance < 0.5;
     });
   };
 
@@ -72,6 +74,28 @@ function App() {
   const toggleStreamlit = () => setShowStreamlit(true);
   const toggleMap = () => setShowStreamlit(false);
   const toggleSideMenu = () => setSideMenuVisible((prev) => !prev);
+
+  // Function to notify authorities
+  const notifyAuthorities = () => {
+    if (!userLocation) {
+      alert('Unable to fetch your location. Please try again.');
+      return;
+    }
+
+    const incidentData = {
+      latitude: userLocation.latitude,
+      longitude: userLocation.longitude,
+      description: incidentDescription || 'No description provided',
+      timestamp: new Date().toLocaleString(),
+    };
+
+    // Log the incident details (you can replace this with an API call or other functionality)
+    console.log('Incident Reported to Authorities:', incidentData);
+    alert('Authorities have been notified about the incident.');
+
+    // Clear the description field
+    setIncidentDescription('');
+  };
 
   return (
     <div className="h-screen flex">
@@ -100,6 +124,22 @@ function App() {
           </button>
         </div>
         {showStreamlit ? <StaticMap /> : <MapComponent />}
+
+        {/* Incident Reporting Section */}
+        <div className="mt-4 w-3/4">
+          <textarea
+            value={incidentDescription}
+            onChange={(e) => setIncidentDescription(e.target.value)}
+            placeholder="Describe the incident (optional)"
+            className="w-full p-2 border rounded mb-2"
+          />
+          <button
+            onClick={notifyAuthorities}
+            className="p-2 bg-red-500 text-white rounded w-full"
+          >
+            Notify Authorities
+          </button>
+        </div>
       </div>
 
       {/* Side Menu */}
