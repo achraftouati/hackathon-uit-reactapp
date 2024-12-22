@@ -23,7 +23,7 @@ function App() {
           setUserLocation({ latitude, longitude });
         },
         (error) => {
-          console.error('Error fetching location:', error);
+          console.error('Erreur de recuperation de localistaion:', error);
         }
       );
     } else {
@@ -33,7 +33,7 @@ function App() {
 
   const calculateDistance = (lat1, lon1, lat2, lon2) => {
     const toRad = (value) => (value * Math.PI) / 180;
-    const R = 6371; // Radius of Earth in kilometers
+    const R = 6371; 
     const dLat = toRad(lat2 - lat1);
     const dLon = toRad(lon2 - lon1);
     const a =
@@ -65,8 +65,8 @@ function App() {
 
     if (newAlertMode) {
       const message = isInSafeZone()
-        ? 'You are in a safe zone.'
-        : 'Warning: You are NOT in a safe zone!';
+        ? 'Vous etes dans une zone sécurisée.'
+        : 'Attention:Vous etes dans une zone de dnager!';
       alert(message);
     }
   };
@@ -75,7 +75,6 @@ function App() {
   const toggleMap = () => setShowStreamlit(false);
   const toggleSideMenu = () => setSideMenuVisible((prev) => !prev);
 
-  // Function to notify authorities
   const notifyAuthorities = () => {
     if (!userLocation) {
       alert('Unable to fetch your location. Please try again.');
@@ -89,17 +88,15 @@ function App() {
       timestamp: new Date().toLocaleString(),
     };
 
-    // Log the incident details (you can replace this with an API call or other functionality)
     console.log('Incident Reported to Authorities:', incidentData);
     alert('Authorities have been notified about the incident.');
 
-    // Clear the description field
     setIncidentDescription('');
   };
 
   return (
     <div className="h-screen flex">
-      {/* Main Content */}
+      {}
       <div className="flex-grow flex flex-col items-center justify-center">
         <h1 className="text-3xl font-bold underline mb-4">User Location on Map</h1>
         <div className="flex items-center gap-4 mb-4">
@@ -125,7 +122,7 @@ function App() {
         </div>
         {showStreamlit ? <StaticMap /> : <MapComponent />}
 
-        {/* Incident Reporting Section */}
+        {}
         <div className="mt-4 w-3/4">
           <textarea
             value={incidentDescription}
@@ -137,12 +134,12 @@ function App() {
             onClick={notifyAuthorities}
             className="p-2 bg-red-500 text-white rounded w-full"
           >
-            Notify Authorities
+            Reporter un Incident
           </button>
         </div>
       </div>
 
-      {/* Side Menu */}
+      {}
       {sideMenuVisible && (
         <div className="side-menu w-1/4 bg-gray-200 p-4">
           <h2 className="text-xl font-bold mb-4">Menu</h2>
@@ -161,7 +158,7 @@ function App() {
         </div>
       )}
 
-      {/* Toggle Button for Side Menu */}
+      {}
       <button
         onClick={toggleSideMenu}
         className="absolute top-4 right-4 p-2 bg-gray-800 text-white rounded"
