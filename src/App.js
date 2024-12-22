@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import MapComponent from './MapComponent';
 import StaticMap from './StaticMap';
-import Switcher1 from './Switcher1';
 
 function App() {
   const [showStreamlit, setShowStreamlit] = useState(false);
