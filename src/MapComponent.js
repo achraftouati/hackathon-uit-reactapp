@@ -95,7 +95,7 @@ const MapComponent = () => {
           {nearestArea && (
             <Circle
               center={[parseFloat(nearestArea.Latitude), parseFloat(nearestArea.Longitude)]}
-              radius={1000} // Adjust the radius as needed
+              radius={5000} // Set a large radius (e.g., 5000 meters)
               color="blue"
               fillColor="blue"
               fillOpacity={0.2}
