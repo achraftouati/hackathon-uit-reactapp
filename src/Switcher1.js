@@ -14,7 +14,7 @@ const Switcher1 = () => {
           isSafeMode ? "text-green-500" : "text-red-500"
         }`}
       >
-        {isSafeMode ? "Safe Mode" : "Alert Mode"}
+        {isSafeMode ? "Mode securisé" : "Alert Mode"}
       </span>
       <button
         onClick={toggleMode}

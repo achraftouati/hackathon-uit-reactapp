@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import MapComponent from './MapComponent';
 import StaticMap from './StaticMap';
+import { ToastContainer, toast } from 'react-toastify';
+
 
 function App() {
   const [showStreamlit, setShowStreamlit] = useState(false);
@@ -27,7 +29,7 @@ function App() {
         }
       );
     } else {
-      console.error('Geolocation is not supported by this browser.');
+      console.error('La geolocation n\'est pas  supportée pour ce navigateur.');
     }
   }, []);
 
@@ -66,7 +68,7 @@ function App() {
     if (newAlertMode) {
       const message = isInSafeZone()
         ? 'Vous etes dans une zone sécurisée.'
-        : 'Attention:Vous etes dans une zone de dnager!';
+        : 'Attention:Vous etes dans une zone de danger!';
       alert(message);
     }
   };
@@ -77,19 +79,11 @@ function App() {
 
   const notifyAuthorities = () => {
     if (!userLocation) {
-      alert('Unable to fetch your location. Please try again.');
+      toast("erreur.");
       return;
     }
 
-    const incidentData = {
-      latitude: userLocation.latitude,
-      longitude: userLocation.longitude,
-      description: incidentDescription || 'No description provided',
-      timestamp: new Date().toLocaleString(),
-    };
-
-    console.log('Incident Reported to Authorities:', incidentData);
-    alert('Authorities have been notified about the incident.');
+    toast("Les authoritées sont notifiées.");
 
     setIncidentDescription('');
   };
@@ -98,14 +92,14 @@ function App() {
     <div className="h-screen flex">
       {}
       <div className="flex-grow flex flex-col items-center justify-center">
-        <h1 className="text-3xl font-bold underline mb-4">User Location on Map</h1>
+        <h1 className="text-7xl font-bold mb-4 text-green-500">Safe Buddy</h1>
         <div className="flex items-center gap-4 mb-4">
           <span
             className={`text-lg font-bold ${
               isAlertMode ? 'text-red-500' : 'text-green-500'
             }`}
           >
-            {isAlertMode ? 'Alert Mode' : 'Safe Mode'}
+            {isAlertMode ? 'Alert Mode' : 'mode securisé'}
           </span>
           <button
             onClick={toggleAlertMode}
@@ -127,15 +121,19 @@ function App() {
           <textarea
             value={incidentDescription}
             onChange={(e) => setIncidentDescription(e.target.value)}
-            placeholder="Describe the incident (optional)"
+            placeholder="Decrivez l'incident (optional)"
             className="w-full p-2 border rounded mb-2"
           />
-          <button
-            onClick={notifyAuthorities}
-            className="p-2 bg-red-500 text-white rounded w-full"
-          >
-            Reporter un Incident
-          </button>
+          
+          <div>
+            <button
+              onClick={notifyAuthorities}
+              className="p-2 bg-red-500 text-white rounded w-full"
+            >
+              Reporter un Incident
+            </button>  
+            <ToastContainer />
+          </div>          
         </div>
       </div>
 
@@ -147,13 +145,13 @@ function App() {
             onClick={toggleMap}
             className="block mb-2 p-2 w-full bg-blue-500 text-white rounded"
           >
-            Show My Location
+             Montrer ma position
           </button>
           <button
             onClick={toggleStreamlit}
             className="block p-2 w-full bg-green-500 text-white rounded"
           >
-            Show Streamlit App
+            Visualisation des données
           </button>
         </div>
       )}
@@ -163,7 +161,7 @@ function App() {
         onClick={toggleSideMenu}
         className="absolute top-4 right-4 p-2 bg-gray-800 text-white rounded"
       >
-        {sideMenuVisible ? 'Hide Menu' : 'Show Menu'}
+        {sideMenuVisible ? 'Caché le menu' : 'Montrer le menu'}
       </button>
     </div>
   );

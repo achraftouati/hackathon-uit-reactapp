@@ -48,11 +48,10 @@ const MapComponent = () => {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           />
           <Marker position={[location.latitude, location.longitude]}>
-            <Popup>You are here!</Popup>
           </Marker>
         </MapContainer>
       ) : (
-        <p>Fetching location...</p>
+        <p>Recherche de location...</p>
       )}
     </div>
   );

@@ -5,7 +5,7 @@ const StaticMap = () => {
     <div>
       <img
                 src={screenshot}
-                alt="Streamlit App"
+                alt="Data Visualisation"
                 className="cursor-pointer"
                 style={{ width: '100%', borderRadius: '8px' }}
                 onClick={() => window.open('https://gdp-dashboard-m01lwv2d4cj.streamlit.app', '_blank')}
