@@ -1,5 +1,3 @@
-// src/Switcher1.js
-
 const Switcher1 = () => {
 
   return (
