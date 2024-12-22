@@ -1,15 +1,18 @@
-// src/MapComponent.js
 import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
-// Fix marker icon issue
+// Fix for missing marker icons
+import markerIcon from 'leaflet/dist/images/marker-icon.png';
+import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
+import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
-  iconUrl: require('leaflet/dist/images/marker-icon.png'),
-  shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+  iconRetinaUrl: markerIcon2x,
+  iconUrl: markerIcon,
+  shadowUrl: markerShadow,
 });
 
 const MapComponent = () => {
@@ -17,8 +20,7 @@ const MapComponent = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Check if Geolocation is available
-    if ("geolocation" in navigator) {
+    if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
@@ -29,23 +31,25 @@ const MapComponent = () => {
         }
       );
     } else {
-      setError("Geolocation is not supported by this browser.");
+      setError('Geolocation is not supported by this browser.');
     }
   }, []);
 
   return (
-    <div className="w-full h-3/4">
+    <div style={{ height: '500px', width: '100%' }}>
       {error && <p className="text-red-500">{error}</p>}
       {location.latitude && location.longitude ? (
-        <MapContainer center={[location.latitude, location.longitude]} zoom={13} className="w-full h-full">
+        <MapContainer
+          center={[location.latitude, location.longitude]}
+          zoom={13}
+          className="w-full h-full"
+        >
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           />
           <Marker position={[location.latitude, location.longitude]}>
-            <Popup>
-              You are here!
-            </Popup>
+            <Popup>You are here!</Popup>
           </Marker>
         </MapContainer>
       ) : (
