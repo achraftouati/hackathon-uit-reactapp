@@ -36,7 +36,7 @@ const MapComponent = () => {
   }, []);
 
   return (
-    <div style={{ height: '500px', width: '100%' }}>
+    <div style={{ height: '400px', width: '100%' }}>
       {error && <p className="text-red-500">{error}</p>}
       {location.latitude && location.longitude ? (
         <MapContainer
