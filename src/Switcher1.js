@@ -1,5 +1,4 @@
 // src/Switcher1.js
-import React, { useState } from 'react';
 
 const Switcher1 = () => {
 
