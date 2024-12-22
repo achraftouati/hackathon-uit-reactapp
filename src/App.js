@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import MapComponent from './MapComponent';
-import StaticMap from './StaticMap';
 
 function App() {
   const [userLocation, setUserLocation] = useState(null);
