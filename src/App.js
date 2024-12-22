@@ -1,9 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import MapComponent from './MapComponent';
+import StaticMap from './StaticMap';
+import Switcher1 from './Switcher1';
 
 function App() {
+  const [showStreamlit, setShowStreamlit] = useState(false);
+  const [sideMenuVisible, setSideMenuVisible] = useState(true);
+  const [isAlertMode, setIsAlertMode] = useState(false);
   const [userLocation, setUserLocation] = useState(null);
-  const [incidentDescription, setIncidentDescription] = useState('');
+
+  const safeZones = [
+    { latitude: 36.8065, longitude: 10.1815 }, 
+    { latitude: 36.8028, longitude: 10.1796 }, 
+    { latitude: 36.8000, longitude: 10.1700 }, 
+  ];
 
   useEffect(() => {
     if ('geolocation' in navigator) {
@@ -21,60 +31,104 @@ function App() {
     }
   }, []);
 
-  const reportIncident = async () => {
-    if (!userLocation) {
-      alert('Unable to fetch your location. Please try again.');
-      return;
-    }
+  const calculateDistance = (lat1, lon1, lat2, lon2) => {
+    const toRad = (value) => (value * Math.PI) / 180;
+    const R = 6371; // Radius of Earth in kilometers
+    const dLat = toRad(lat2 - lat1);
+    const dLon = toRad(lon2 - lon1);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(toRad(lat1)) *
+        Math.cos(toRad(lat2)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c; 
+  };
+  const isInSafeZone = () => {
+    if (!userLocation) return false;
+    return safeZones.some((zone) => {
+      const distance = calculateDistance(
+        userLocation.latitude,
+        userLocation.longitude,
+        zone.latitude,
+        zone.longitude
+      );
+      return distance < 0.5; 
+    });
+  };
 
-    const incidentData = {
-      latitude: userLocation.latitude,
-      longitude: userLocation.longitude,
-      description: incidentDescription || 'No description provided',
-    };
+  const toggleAlertMode = () => {
+    const newAlertMode = !isAlertMode;
+    setIsAlertMode(newAlertMode);
 
-    try {
-      const response = await fetch('YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(incidentData),
-      });
-
-      const result = await response.json();
-      if (result.status === 'success') {
-        alert('Incident reported successfully!');
-        setIncidentDescription('');
-      } else {
-        alert('Failed to report the incident. Please try again.');
-      }
-    } catch (error) {
-      console.error('Error reporting incident:', error);
-      alert('An error occurred while reporting the incident.');
+    if (newAlertMode) {
+      const message = isInSafeZone()
+        ? 'You are in a safe zone.'
+        : 'Warning: You are NOT in a safe zone!';
+      alert(message);
     }
   };
 
-  return (
-    <div className="h-screen flex flex-col items-center justify-center">
-      <h1 className="text-3xl font-bold underline mb-4">User Location on Map</h1>
-      <MapComponent />
+  const toggleStreamlit = () => setShowStreamlit(true);
+  const toggleMap = () => setShowStreamlit(false);
+  const toggleSideMenu = () => setSideMenuVisible((prev) => !prev);
 
-      {}
-      <div className="mt-4 w-3/4">
-        <textarea
-          value={incidentDescription}
-          onChange={(e) => setIncidentDescription(e.target.value)}
-          placeholder="Describe the incident (optional)"
-          className="w-full p-2 border rounded mb-2"
-        />
-        <button
-          onClick={reportIncident}
-          className="p-2 bg-red-500 text-white rounded w-full"
-        >
-          Report Incident
-        </button>
+  return (
+    <div className="h-screen flex">
+      {/* Main Content */}
+      <div className="flex-grow flex flex-col items-center justify-center">
+        <h1 className="text-3xl font-bold underline mb-4">User Location on Map</h1>
+        <div className="flex items-center gap-4 mb-4">
+          <span
+            className={`text-lg font-bold ${
+              isAlertMode ? 'text-red-500' : 'text-green-500'
+            }`}
+          >
+            {isAlertMode ? 'Alert Mode' : 'Safe Mode'}
+          </span>
+          <button
+            onClick={toggleAlertMode}
+            className={`w-12 h-6 rounded-full flex items-center ${
+              isAlertMode ? 'bg-red-500' : 'bg-green-500'
+            }`}
+          >
+            <div
+              className={`w-6 h-6 bg-white rounded-full shadow transform transition-transform ${
+                isAlertMode ? 'translate-x-6' : 'translate-x-0'
+              }`}
+            ></div>
+          </button>
+        </div>
+        {showStreamlit ? <StaticMap /> : <MapComponent />}
       </div>
+
+      {/* Side Menu */}
+      {sideMenuVisible && (
+        <div className="side-menu w-1/4 bg-gray-200 p-4">
+          <h2 className="text-xl font-bold mb-4">Menu</h2>
+          <button
+            onClick={toggleMap}
+            className="block mb-2 p-2 w-full bg-blue-500 text-white rounded"
+          >
+            Show My Location
+          </button>
+          <button
+            onClick={toggleStreamlit}
+            className="block p-2 w-full bg-green-500 text-white rounded"
+          >
+            Show Streamlit App
+          </button>
+        </div>
+      )}
+
+      {/* Toggle Button for Side Menu */}
+      <button
+        onClick={toggleSideMenu}
+        className="absolute top-4 right-4 p-2 bg-gray-800 text-white rounded"
+      >
+        {sideMenuVisible ? 'Hide Menu' : 'Show Menu'}
+      </button>
     </div>
   );
 }
